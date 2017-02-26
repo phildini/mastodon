@@ -40,9 +40,10 @@ class FollowRemoteAccountService < BaseService
 
       domain_block = DomainBlock.find_by(domain: domain)
       account = Account.new(username: confirmed_username, domain: confirmed_domain)
-      account.suspended   = true if domain_block && domain_block.suspend?
-      account.silenced    = true if domain_block && domain_block.silence?
+      allow_domain_service = AllowDomainService.new
       account.private_key = nil
+      account.suspended   = allow_domain_service.call(domain) == :suspend
+      account.silenced    = allow_domain_service.call(domain) == :silence
     else
       account = confirmed_account
     end
@@ -53,6 +54,7 @@ class FollowRemoteAccountService < BaseService
     account.salmon_url  = data.link('salmon').href
     account.url         = data.link('http://webfinger.net/rel/profile-page').href
     account.public_key  = magic_key_to_pem(data.link('magic-public-key').href)
+
 
     body, xml = get_feed(account.remote_url)
     hubs      = get_hubs(xml)
