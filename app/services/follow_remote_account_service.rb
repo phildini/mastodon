@@ -33,7 +33,7 @@ class FollowRemoteAccountService < BaseService
 
     Rails.logger.debug "Creating new remote account for #{uri}"
 
-    domain_block = DomainBlock.find_by(domain: domain)
+    allow_domain_service = AllowDomainService.new
 
     account = Account.new(username: confirmed_username, domain: confirmed_domain)
     account.remote_url  = data.link('http://schemas.google.com/g/2010#updates-from').href
@@ -41,8 +41,8 @@ class FollowRemoteAccountService < BaseService
     account.url         = data.link('http://webfinger.net/rel/profile-page').href
     account.public_key  = magic_key_to_pem(data.link('magic-public-key').href)
     account.private_key = nil
-    account.suspended   = true if domain_block && domain_block.suspend?
-    account.silenced    = true if domain_block && domain_block.silence?
+    account.suspended   = allow_domain_service.call(domain) == :suspend
+    account.silenced    = allow_domain_service.call(domain) == :silence
 
     body, xml = get_feed(account.remote_url)
     hubs      = get_hubs(xml)
