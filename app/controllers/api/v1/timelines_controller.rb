@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::TimelinesController < ApiController
-  before_action -> { doorkeeper_authorize! :read }, only: [:home]
-  before_action :require_user!, only: [:home]
+  before_action -> { doorkeeper_authorize! :read }
+  before_action :require_user!, only: [:home, :mentions]
 
   respond_to :json
 
