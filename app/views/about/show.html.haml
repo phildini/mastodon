@@ -17,9 +17,14 @@
 .wrapper
   %h1
     = image_tag 'logo.png'
-    Mastodon
+    Kink.Family
+
+  - unless @instance_presenter.site_description.blank?
+    %h3= t('about.description_headline', domain: Rails.configuration.x.local_domain)
+    %p= @instance_presenter.site_description.html_safe
 
   %p= t('about.about_mastodon').html_safe
+
 
   .screenshot-with-signup
     .mascot= image_tag 'fluffy-elephant-friend.png'
@@ -70,10 +75,6 @@
         %li
           = fa_icon('li check-square')
           = t 'about.features.api'
-
-  - unless @instance_presenter.site_description.blank?
-    %h3= t('about.description_headline', domain: Rails.configuration.x.local_domain)
-    %p= @instance_presenter.site_description.html_safe
 
   .actions
     .info
