@@ -4,6 +4,8 @@ services:
   db:
     restart: always
     image: postgres:alpine
+    environment:
+      - DB_POOL=20
 ### Uncomment to enable DB persistance
 #    volumes:
 #      - ./postgres:/var/lib/postgresql/data
@@ -20,6 +22,9 @@ services:
     image: gargron/mastodon
     restart: always
     env_file: .env.production
+    environment:
+      - WEB_CURRENCY=6
+      - RAILS_LOG_LEVEL=warn
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     ports:
       - "3000:3000"
@@ -48,7 +53,7 @@ services:
     image: gargron/mastodon
     restart: always
     env_file: .env.production
-    command: bundle exec sidekiq -q default -q mailers -q pull -q push
+    command: bundle exec sidekiq -c 20 -q default -q mailers -q pull -q push
     depends_on:
       - db
       - redis
