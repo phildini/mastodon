@@ -6,6 +6,7 @@ class StreamEntriesController < ApplicationController
   before_action :set_account
   before_action :set_stream_entry
   before_action :set_link_headers
+  before_action :authenticate_user!
   before_action :check_account_suspension
 
   def show
