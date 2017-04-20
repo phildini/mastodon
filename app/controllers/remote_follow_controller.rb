@@ -5,6 +5,7 @@ class RemoteFollowController < ApplicationController
 
   before_action :set_account
   before_action :check_account_suspension
+  before_action :authenticate_user!
 
   def new
     @remote_follow = RemoteFollow.new

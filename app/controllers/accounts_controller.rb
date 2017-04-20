@@ -5,7 +5,7 @@ class AccountsController < ApplicationController
 
   before_action :set_account
   before_action :set_link_headers
-  before_action :authenticate_user!, only: [:follow, :unfollow]
+  before_action :authenticate_user!#, only: [:follow, :unfollow]
   before_action :check_account_suspension
 
   def show
