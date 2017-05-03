@@ -10,6 +10,7 @@ module AccountControllerConcern
     before_action :set_account
     before_action :set_link_headers
     before_action :check_account_suspension
+    before_action :authenticate_user!
   end
 
   private

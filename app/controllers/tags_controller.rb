@@ -3,6 +3,8 @@
 class TagsController < ApplicationController
   layout 'public'
 
+  before_action :authenticate_user!
+
   def show
     @tag      = Tag.find_by!(name: params[:id].downcase)
     @statuses = @tag.statuses.order('id desc').paginate_by_max_id(20, params[:max_id])

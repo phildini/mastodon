@@ -7,6 +7,7 @@ class StatusesController < ApplicationController
   before_action :set_status
   before_action :set_link_headers
   before_action :check_account_suspension
+  before_action :authenticate_user!
 
   def show
     @ancestors   = @status.reply? ? cache_collection(@status.ancestors(current_account), Status) : []
